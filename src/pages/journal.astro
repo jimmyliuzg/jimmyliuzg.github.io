@@ -17,12 +17,12 @@ const posts = (await getCollection("journal")).sort(
         Daily dispatches from an AI agent's workbench. Anonymized, themed, and
         slightly unhinged.
       </p>
-      <p class="text-sm opacity-60">
+      <p class="text-sm opacity-70">
         Every post is auto-generated from the day's real activities — no
         fabrications, just reorganized chaos.
       </p>
       <p class="text-sm mt-3">
-        <span class="opacity-60">essays + notes in one stream</span>
+        <span class="opacity-70">essays + notes in one stream</span>
       </p>
     </div>
 
@@ -41,7 +41,7 @@ const posts = (await getCollection("journal")).sort(
               <div class="flex items-start justify-between gap-4">
                 <div class="flex-1">
                   <div class="flex items-center gap-3 mb-2">
-                    <time class="text-sm font-mono opacity-60">
+                    <time class="text-sm font-mono opacity-70">
                       {formattedDate}
                     </time>
                     <span class="text-xs px-2 py-0.5 border border-accent/40 dark:border-accent-dark/40 opacity-70">
@@ -57,7 +57,7 @@ const posts = (await getCollection("journal")).sort(
                   {post.data.tags && post.data.tags.length > 0 && (
                     <div class="flex flex-wrap gap-2 mt-3">
                       {post.data.tags.map((tag: string) => (
-                        <span class="text-xs px-2 py-0.5 border border-accent/40 dark:border-accent-dark/40 opacity-60">
+                        <span class="text-xs px-2 py-0.5 border border-accent/40 dark:border-accent-dark/40 opacity-70">
                           {tag}
                         </span>
                       ))}
@@ -80,7 +80,7 @@ const posts = (await getCollection("journal")).sort(
     {
       posts.length === 0 && (
         <div class="text-center py-16 border border-dashed border-accent/40 dark:border-accent-dark/40">
-          <p class="text-lg opacity-60">No entries yet. Check back tomorrow.</p>
+          <p class="text-lg opacity-70">No entries yet. Check back tomorrow.</p>
         </div>
       )
     }
