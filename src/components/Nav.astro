@@ -1,0 +1,291 @@
+---
+/**
+ * Unified navigation — single source for all pages.
+ * variant "single": homepage-style anchor nav (sections + scroll-spy + hide-on-scroll)
+ * variant "multi": subpage-style page nav (aria-current based)
+ */
+interface Props {
+  variant: "single" | "multi";
+}
+
+const { variant } = Astro.props;
+const pathname = Astro.url.pathname;
+
+const isHomepage = variant === "single";
+
+const links = isHomepage
+  ? [
+      { label: "Projects", href: isHomepage ? "#projects" : "/#projects" },
+      { label: "About", href: isHomepage ? "#about" : "/#about" },
+      { label: "Field Notes", href: "/journal" },
+    ]
+  : [
+      { label: "Home", href: "/" },
+      { label: "About", href: "/about" },
+      { label: "Projects", href: "/projects" },
+      { label: "Field Notes", href: "/journal" },
+    ];
+
+const wordmarkHref = isHomepage ? (pathname === "/" ? "#hero" : "/") : "/";
+const contactHref = isHomepage ? (pathname === "/" ? "#contact" : "/#contact") : "/contact";
+
+const isActive = (href: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
+---
+
+<nav
+  id="main-nav"
+  class="fixed top-0 left-0 right-0 z-50 bg-light-bg dark:bg-dark-bg transition-transform duration-300"
+>
+  <div class="max-w-6xl mx-auto px-5 md:px-10 pt-4 pb-3 flex justify-between items-baseline gap-6">
+    <!-- Left-aligned: wordmark + links -->
+    <div class="flex items-baseline gap-8">
+      <a
+        href={wordmarkHref}
+        class="text-lg md:text-xl font-bold tracking-[0.01em] text-accent dark:text-accent-dark hover:text-secondary dark:hover:text-secondary-dark transition-colors shrink-0"
+      >
+        Jimmy Liu
+      </a>
+
+      <!-- Desktop Navigation -->
+      <ul class="hidden md:flex gap-6 text-xs font-medium uppercase tracking-[0.08em]">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                aria-current={variant === "multi" && isActive(link.href) ? "page" : undefined}
+                data-section={variant === "single" ? link.href.replace(/^\/?#/, "") : undefined}
+                class={
+                  variant === "multi"
+                    ? `relative py-1 transition-colors ${isActive(link.href) ? "is-current font-bold" : "text-light-text dark:text-dark-text hover:text-accent dark:hover:text-accent-dark"}`
+                    : "nav-link relative py-1 text-light-text dark:text-dark-text hover:text-accent dark:hover:text-accent-dark transition-colors"
+                }
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Right-aligned: contact + social + toggle -->
+    <div class="flex items-center gap-4 text-xs font-medium uppercase tracking-[0.08em]">
+      <a
+        href={contactHref}
+        aria-current={variant === "multi" && isActive("/contact") ? "page" : undefined}
+        class={
+          variant === "multi"
+            ? `transition-colors ${isActive("/contact") ? "is-current font-bold" : "text-accent dark:text-accent-dark font-bold hover:text-secondary dark:hover:text-secondary-dark"}`
+            : "text-accent dark:text-accent-dark font-bold hover:text-secondary dark:hover:text-secondary-dark transition-colors"
+        }
+      >
+        Contact
+      </a>
+      <a
+        href="https://github.com/jimmyliuzg"
+        target="_blank"
+        rel="noopener"
+        class="hidden sm:inline text-light-text dark:text-dark-text hover:text-accent dark:hover:text-accent-dark transition-colors"
+      >
+        GitHub
+      </a>
+      <a
+        href="https://www.linkedin.com/in/jimmy-l-92b028112/"
+        target="_blank"
+        rel="noopener"
+        class="hidden sm:inline text-light-text dark:text-dark-text hover:text-accent dark:hover:text-accent-dark transition-colors"
+      >
+        LinkedIn
+      </a>
+      <button
+        data-dark-toggle
+        aria-label="Toggle Dark Mode"
+        class="px-2.5 py-1 border border-accent dark:border-accent-dark text-accent dark:text-accent-dark hover:bg-accent hover:text-white dark:hover:bg-accent-dark dark:hover:text-dark-bg transition-colors text-[11px] font-bold"
+      >
+        ☀/☾
+      </button>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden px-2.5 py-1 border border-accent dark:border-accent-dark text-accent dark:text-accent-dark"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-5 md:px-10">
+    <div class="border-t border-accent dark:border-accent-dark"></div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden border-t border-accent/40 dark:border-accent-dark/40 bg-light-bg dark:bg-dark-bg"
+  >
+    <ul class="flex flex-col py-4">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={variant === "multi" && isActive(link.href) ? "page" : undefined}
+              class={`block px-6 py-3 uppercase tracking-wider text-sm font-medium hover:bg-accent/5 dark:hover:bg-accent-dark/5 ${variant === "multi" && isActive(link.href) ? "text-accent dark:text-accent-dark font-bold" : ""}`}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a
+          href={contactHref}
+          aria-current={variant === "multi" && isActive("/contact") ? "page" : undefined}
+          class="block px-6 py-3 uppercase tracking-wider text-sm font-bold text-accent dark:text-accent-dark hover:bg-accent/5 dark:hover:bg-accent-dark/5"
+        >
+          Contact
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Back to Top Button -->
+<button
+  id="back-to-top"
+  class="fixed bottom-8 right-8 w-11 h-11 bg-accent dark:bg-accent-dark text-white dark:text-dark-bg opacity-0 pointer-events-none transition-all duration-300 hover:opacity-80 z-40 flex items-center justify-center rounded-none"
+  aria-label="Back to top"
+>
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+  </svg>
+</button>
+
+<script is:inline>
+  // Theme toggle
+  const toggleBtns = document.querySelectorAll("[data-dark-toggle]");
+  const html = document.documentElement;
+
+  toggleBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      html.classList.toggle("dark");
+      localStorage.setItem(
+        "theme",
+        html.classList.contains("dark") ? "dark" : "light",
+      );
+    });
+  });
+
+  // Light mode default — only opt into dark when explicitly saved.
+  try {
+    if (localStorage.getItem("theme") === "dark") html.classList.add("dark");
+    else html.classList.remove("dark");
+  } catch (e) {
+    html.classList.remove("dark");
+  }
+
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+
+  mobileMenuBtn?.addEventListener("click", () => {
+    mobileMenu?.classList.toggle("hidden");
+  });
+
+  // Close mobile menu when clicking a link
+  mobileMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mobileMenu.classList.add("hidden");
+    });
+  });
+
+  // Back to top button
+  const backToTop = document.getElementById("back-to-top");
+  const mainNav = document.getElementById("main-nav");
+  const isSingleVariant =
+    document.querySelector(".nav-link[data-section]") !== null;
+
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  function handleScroll() {
+    const currentScrollY = window.scrollY;
+
+    // Back to top button visibility
+    if (currentScrollY > 500) {
+      backToTop?.classList.remove("opacity-0", "pointer-events-none");
+      backToTop?.classList.add("opacity-100", "pointer-events-auto");
+    } else {
+      backToTop?.classList.add("opacity-0", "pointer-events-none");
+      backToTop?.classList.remove("opacity-100", "pointer-events-auto");
+    }
+
+    // Hide/show nav on scroll direction (single-variant pages only)
+    if (isSingleVariant) {
+      if (currentScrollY > 300) {
+        if (currentScrollY > lastScrollY) {
+          mainNav?.classList.add("-translate-y-full");
+        } else {
+          mainNav?.classList.remove("-translate-y-full");
+        }
+      } else {
+        mainNav?.classList.remove("-translate-y-full");
+      }
+    }
+
+    lastScrollY = currentScrollY;
+    ticking = false;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => handleScroll());
+      ticking = true;
+    }
+  });
+
+  backToTop?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // Active section highlighting (scroll-spy, single-variant pages only)
+  const navLinks = document.querySelectorAll(".nav-link");
+  const sections = document.querySelectorAll("section[id]");
+
+  function updateActiveNav() {
+    const scrollPosition = window.scrollY + 200;
+
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      const sectionId = section.getAttribute("id");
+
+      if (
+        scrollPosition >= sectionTop &&
+        scrollPosition < sectionTop + sectionHeight
+      ) {
+        navLinks.forEach((link) => {
+          link.classList.remove("font-bold");
+          if (link.getAttribute("data-section") === sectionId) {
+            link.classList.add("font-bold");
+          }
+        });
+      }
+    });
+  }
+
+  if (isSingleVariant) {
+    window.addEventListener("scroll", updateActiveNav);
+    updateActiveNav();
+  }
+</script>
