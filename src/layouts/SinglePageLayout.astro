@@ -17,7 +17,7 @@ const isHomepage = Astro.url.pathname === "/";
 const navLinks = [
     { label: "Projects", href: isHomepage ? "#projects" : "/#projects" },
     { label: "About", href: isHomepage ? "#about" : "/#about" },
-    { label: "Journal", href: "/journal" },
+    { label: "Field Notes", href: "/journal" },
 ];
 
 const contactHref = isHomepage ? "#contact" : "/#contact";
