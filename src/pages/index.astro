@@ -264,20 +264,6 @@ const categories = ["All", "Personal", "Experimental", "Technical"];
         </a>
       </div>
 
-      <!-- Load More Button (shown when > 6 projects) -->
-      {
-        allProjects.length > 6 && (
-          <div class="text-center mt-12">
-            <button
-              id="load-more-projects"
-              class="btn-secondary"
-            >
-              Load More Projects
-            </button>
-          </div>
-        )
-      }
-
       <!-- CTA between sections -->
       <div class="mt-16 text-center">
         <p class="text-lg opacity-70 mb-4">Interested in working together?</p>
@@ -734,35 +720,4 @@ const categories = ["All", "Personal", "Experimental", "Technical"];
       });
     });
   });
-
-  // Load more functionality
-  const loadMoreBtn = document.getElementById("load-more-projects");
-  let visibleCount = 6;
-
-  if (loadMoreBtn) {
-    // Initially hide projects beyond 6
-    projectCards.forEach((card, index) => {
-      if (index >= 6) {
-        (card as HTMLElement).style.display = "none";
-      }
-    });
-
-    loadMoreBtn.addEventListener("click", () => {
-      const hiddenCards = Array.from(projectCards).slice(
-        visibleCount,
-        visibleCount + 3,
-      );
-      hiddenCards.forEach((card) => {
-        (card as HTMLElement).style.display = "block";
-        setTimeout(() => {
-          (card as HTMLElement).style.opacity = "1";
-        }, 50);
-      });
-      visibleCount += 3;
-
-      if (visibleCount >= projectCards.length) {
-        loadMoreBtn.style.display = "none";
-      }
-    });
-  }
 </script>
