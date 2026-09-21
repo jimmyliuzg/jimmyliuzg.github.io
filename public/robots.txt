@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jimmyliuzg.github.io/sitemap-index.xml
